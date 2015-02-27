@@ -15,8 +15,8 @@ start using it, follow these steps:
 
    - Clone `git-wip` to your `$HOME` directory:
 
-        $ cd
-        $ git clone https://github.com/itsjeyd/git-wip
+            $ cd
+            $ git clone https://github.com/itsjeyd/git-wip
 
      You can also clone `git-wip` to a different directory. Note that
      if this directory is not part of your `exec-path` in Emacs,
@@ -25,7 +25,7 @@ start using it, follow these steps:
 
    - Add the following code to your init-file:
 
-        (load "/path/to/git-wip/emacs/git-wip.el")
+            (load "/path/to/git-wip/emacs/git-wip.el")
 
      Next time you save a file that is part of a `git` repository,
      Emacs will automatically create a WIP commit by calling out to
