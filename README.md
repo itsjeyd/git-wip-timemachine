@@ -1,4 +1,4 @@
-## git-wip-timemachine.el
+## git-wip-timemachine
 
 `git-wip-timemachine` is a modified version of
 [`git-timemachine`](https://github.com/pidu/git-timemachine) by Peter
