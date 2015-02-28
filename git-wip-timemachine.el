@@ -40,11 +40,16 @@
 (require 'cl-lib)
 (require 's)
 
+(defvar git-wip-timemachine-branch nil)
 (defvar git-wip-timemachine-directory nil)
-(make-variable-buffer-local 'git-wip-timemachine-directory)
 (defvar git-wip-timemachine-file nil)
-(make-variable-buffer-local 'git-wip-timemachine-file)
+(defvar git-wip-timemachine-merge-base nil)
 (defvar git-wip-timemachine-revision nil)
+
+(make-variable-buffer-local 'git-wip-timemachine-branch)
+(make-variable-buffer-local 'git-wip-timemachine-directory)
+(make-variable-buffer-local 'git-wip-timemachine-file)
+(make-variable-buffer-local 'git-wip-timemachine-merge-base)
 (make-variable-buffer-local 'git-wip-timemachine-revision)
 
 ;; Command (excluding hash of last commit of wip "parent branch"):
@@ -56,11 +61,6 @@
 ;; Programmatically determine current branch:
 ;; git symbolic-ref --short -q HEAD
 ;; Source: http://git-blame.blogspot.de/2013/06/checking-current-branch-programatically.html
-
-(defvar git-wip-timemachine-branch nil)
-(make-variable-buffer-local 'git-wip-timemachine-branch)
-(defvar git-wip-timemachine-merge-base nil)
-(make-variable-buffer-local 'git-wip-timemachine-merge-base)
 
 (defun git-wip-timemachine--revisions ()
  "List git-wip revisions of current buffer's file."
