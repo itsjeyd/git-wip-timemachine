@@ -134,7 +134,7 @@
 (define-minor-mode git-wip-timemachine-mode
  "Git WIP Timemachine, feel the wings of history."
  :init-value nil
- :lighter " Timemachine"
+ :lighter " WIP Timemachine"
  :keymap
  '(("p" . git-wip-timemachine-show-previous-revision)
    ("n" . git-wip-timemachine-show-next-revision)
