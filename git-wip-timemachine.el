@@ -123,7 +123,7 @@
  (kill-buffer))
 
 (defun git-wip-timemachine-kill-revision ()
- "Kill the current revisions commit hash."
+ "Kill the current revision's commit hash."
  (interactive)
  (let ((this-revision git-wip-timemachine-revision))
   (with-temp-buffer
