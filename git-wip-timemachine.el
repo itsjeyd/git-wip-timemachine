@@ -37,8 +37,8 @@
 
 ;;; Code:
 
-(require 's)
 (require 'cl-lib)
+(require 's)
 
 (defvar git-wip-timemachine-directory nil)
 (make-variable-buffer-local 'git-wip-timemachine-directory)
