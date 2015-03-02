@@ -187,9 +187,9 @@ Call with the value of `buffer-file-name'."
 (defun git-wip-timemachine ()
  "Enable git-wip timemachine for file of current buffer."
  (interactive)
- (let* ((git-directory (concat (s-trim-right
-                                (shell-command-to-string
-                                 "git rev-parse --show-toplevel")) "/"))
+ (git-wip-timemachine-validate (buffer-file-name))
+ (let* ((file-name (buffer-file-name))
+        (git-directory (expand-file-name (vc-git-root file-name)))
         (current-branch (s-trim-right
                          (shell-command-to-string
                           "git symbolic-ref --short -q HEAD")))
@@ -197,19 +197,21 @@ Call with the value of `buffer-file-name'."
                      (shell-command-to-string
                       (format "git merge-base wip/%s %s"
                               current-branch current-branch))))
-        (relative-file (s-chop-prefix git-directory (buffer-file-name)))
-        (timemachine-buffer (format "WIP timemachine:%s" (buffer-name))))
+        (timemachine-buffer (format "WIP timemachine:%s" (buffer-name)))
+        (current-position (point))
+        (current-mode major-mode))
   (with-current-buffer (get-buffer-create timemachine-buffer)
-   (setq buffer-file-name relative-file)
-   (set-auto-mode)
-   (git-wip-timemachine-mode)
-   (setq git-wip-timemachine-directory git-directory
-         git-wip-timemachine-file relative-file
-         git-wip-timemachine-revision nil
-         git-wip-timemachine-branch current-branch
-         git-wip-timemachine-merge-base merge-base)
-   (git-wip-timemachine-show-current-revision)
-   (switch-to-buffer timemachine-buffer))))
+    (setq buffer-file-name file-name)
+    (funcall current-mode)
+    (git-wip-timemachine-mode)
+    (setq git-wip-timemachine-directory git-directory
+          git-wip-timemachine-file (file-relative-name file-name git-directory)
+          git-wip-timemachine-revision nil
+          git-wip-timemachine-branch current-branch
+          git-wip-timemachine-merge-base merge-base)
+    (git-wip-timemachine-show-current-revision)
+    (switch-to-buffer timemachine-buffer)
+    (goto-char current-position))))
 
 (provide 'git-wip-timemachine)
 
