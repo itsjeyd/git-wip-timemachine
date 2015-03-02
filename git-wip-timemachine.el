@@ -37,7 +37,6 @@
 
 ;;; Code:
 
-(require 'cl-lib)
 (require 's)
 (require 'vc-git)
 
@@ -74,15 +73,28 @@ will be shown in the minibuffer while navigating commits."
 
 (defun git-wip-timemachine--revisions ()
  "List git-wip revisions of current buffer's file."
- (split-string
-  (shell-command-to-string
-   (format "cd %s && git log wip/%s %s ^%s~1 --pretty=format:%s %s"
-    (shell-quote-argument git-wip-timemachine-directory)
-    (shell-quote-argument git-wip-timemachine-branch)
-    (shell-quote-argument git-wip-timemachine-branch)
-    (shell-quote-argument git-wip-timemachine-merge-base)
-    (shell-quote-argument "%H")
-    (shell-quote-argument git-wip-timemachine-file)))))
+ (let ((default-directory git-wip-timemachine-directory)
+       (file git-wip-timemachine-file)
+       (branch git-wip-timemachine-branch)
+       (wip-branch (format "wip/%s" git-wip-timemachine-branch))
+       (exclude-from (format "^%s~1" git-wip-timemachine-merge-base)))
+   (with-temp-buffer
+     (unless (zerop (process-file vc-git-program nil t nil
+                                  "--no-pager" "log"
+                                  wip-branch branch exclude-from
+                                  "--pretty=format:%H--%ad--%ar" file))
+       (error "Failed to obtain revisions for %s." file))
+     (goto-char (point-min))
+     (let ((revision-number (count-lines (point-min) (point-max)))
+           revisions)
+       (while (not (eobp))
+         (let* ((line (buffer-substring-no-properties
+                       (line-beginning-position) (line-end-position)))
+                (revision (cons revision-number (split-string line "--"))))
+           (push revision revisions))
+         (setq revision-number (1- revision-number))
+         (forward-line 1))
+       (nreverse revisions)))))
 
 (defun git-wip-timemachine-show-current-revision ()
  "Show last (current) revision of file."
@@ -106,26 +118,30 @@ will be shown in the minibuffer while navigating commits."
 (defun git-wip-timemachine-show-revision (revision)
  "Show a REVISION (commit hash) of the current file."
  (when revision
-  (let ((current-position (point)))
-   (setq buffer-read-only nil)
-   (erase-buffer)
-   (insert
-    (shell-command-to-string
-     (format "cd %s && git show %s:%s"
-      (shell-quote-argument git-wip-timemachine-directory)
-      (shell-quote-argument revision)
-      (shell-quote-argument git-wip-timemachine-file))))
-   (setq buffer-read-only t)
-   (set-buffer-modified-p nil)
-   (let* ((revisions (git-wip-timemachine--revisions))
-          (n-of-m (format "(%d/%d)"
-                          (- (length revisions)
-                             (cl-position revision revisions :test 'equal))
-                          (length revisions))))
-    (setq mode-line-format
-          (list "Commit: " (git-wip-timemachine-abbreviate revision) " -- %b -- " n-of-m " -- [%p]")))
-   (setq git-wip-timemachine-revision revision)
-   (goto-char current-position))))
+  (let ((current-position (point))
+        (revision-number (car revision))
+        (commit-hash (nth 1 revision))
+        (date-full (nth 2 revision))
+        (date-relative (nth 3 revision)))
+    (setq buffer-read-only nil)
+    (erase-buffer)
+    (insert
+     (shell-command-to-string
+      (format "cd %s && git show %s:%s"
+              (shell-quote-argument git-wip-timemachine-directory)
+              (shell-quote-argument commit-hash)
+              (shell-quote-argument git-wip-timemachine-file))))
+    (setq buffer-read-only t)
+    (set-buffer-modified-p nil)
+    (let* ((total-revisions (length (git-wip-timemachine--revisions)))
+           (n-of-m (format "(%d/%d)" revision-number total-revisions)))
+      (setq mode-line-format
+            (list "Commit: " (git-wip-timemachine-abbreviate commit-hash) " -- %b -- " n-of-m " -- [%p]")))
+    (setq git-wip-timemachine-revision revision)
+    (goto-char current-position)
+    (when git-wip-timemachine-show-minibuffer-details
+      (message "Commit: %s -- Date: %s [%s]"
+               commit-hash date-full date-relative)))))
 
 (defun git-wip-timemachine-abbreviate (revision)
   "Return REVISION abbreviated to `git-wip-timemachine-abbreviation-length' chars."
@@ -139,7 +155,7 @@ will be shown in the minibuffer while navigating commits."
 (defun git-wip-timemachine-kill-revision ()
  "Kill the current revision's commit hash."
  (interactive)
- (let ((this-revision git-wip-timemachine-revision))
+ (let ((this-revision (nth 1 git-wip-timemachine-revision)))
   (with-temp-buffer
    (insert this-revision)
    (message (buffer-string))
@@ -148,7 +164,7 @@ will be shown in the minibuffer while navigating commits."
 (defun git-wip-timemachine-kill-abbreviated-revision ()
   "Kill the current revision's abbreviated commit hash."
   (interactive)
-  (let ((this-revision (git-wip-timemachine-abbreviate git-wip-timemachine-revision)))
+  (let ((this-revision (git-wip-timemachine-abbreviate (nth 1 git-wip-timemachine-revision))))
     (with-temp-buffer
       (insert this-revision)
       (message (buffer-string))
