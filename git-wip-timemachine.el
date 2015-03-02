@@ -81,7 +81,7 @@ will be shown in the minibuffer while navigating commits."
     (shell-quote-argument git-wip-timemachine-branch)
     (shell-quote-argument git-wip-timemachine-branch)
     (shell-quote-argument git-wip-timemachine-merge-base)
-    (shell-quote-argument "%h")
+    (shell-quote-argument "%H")
     (shell-quote-argument git-wip-timemachine-file)))))
 
 (defun git-wip-timemachine-show-current-revision ()
@@ -123,7 +123,7 @@ will be shown in the minibuffer while navigating commits."
                              (cl-position revision revisions :test 'equal))
                           (length revisions))))
     (setq mode-line-format
-          (list "Commit: " revision " -- %b -- " n-of-m " -- [%p]")))
+          (list "Commit: " (git-wip-timemachine-abbreviate revision) " -- %b -- " n-of-m " -- [%p]")))
    (setq git-wip-timemachine-revision revision)
    (goto-char current-position))))
 
