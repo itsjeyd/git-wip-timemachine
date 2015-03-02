@@ -125,12 +125,9 @@ will be shown in the minibuffer while navigating commits."
         (date-relative (nth 3 revision)))
     (setq buffer-read-only nil)
     (erase-buffer)
-    (insert
-     (shell-command-to-string
-      (format "cd %s && git show %s:%s"
-              (shell-quote-argument git-wip-timemachine-directory)
-              (shell-quote-argument commit-hash)
-              (shell-quote-argument git-wip-timemachine-file))))
+    (let ((default-directory git-wip-timemachine-directory))
+      (process-file vc-git-program nil t nil
+                    "--no-pager" "show" (format "%s:%s" commit-hash git-wip-timemachine-file)))
     (setq buffer-read-only t)
     (set-buffer-modified-p nil)
     (let* ((total-revisions (length (git-wip-timemachine--revisions)))
