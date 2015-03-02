@@ -1,4 +1,4 @@
-## git-wip-timemachine
+## git-wip-timemachine <a href="http://opensource.org/licenses/GPL-3.0"><img src="https://img.shields.io/badge/license-GPL-blue.svg" /></a>
 
 `git-wip-timemachine` is a modified version of
 [`git-timemachine`](https://github.com/pidu/git-timemachine) by Peter
@@ -89,3 +89,7 @@ following code to your init-file:
       (magit-key-mode-toggle-option 'logging "--all"))
 
     (define-key magit-mode-map (kbd "l") 'magit-log-all)
+
+Note that while `git-wip-timemachine` only considers WIP commits that
+introduce changes to the file it was called from, `magit` will show
+*all* WIP commits by default (irrespective of the file(s) they touch).
