@@ -164,16 +164,17 @@ will be shown in the minibuffer while navigating commits."
     (kill-new revision)))
 
 (define-minor-mode git-wip-timemachine-mode
- "Git WIP Timemachine, feel the wings of history."
- :init-value nil
- :lighter " WIP Timemachine"
- :keymap
- '(("p" . git-wip-timemachine-show-previous-revision)
-   ("n" . git-wip-timemachine-show-next-revision)
-   ("q" . git-wip-timemachine-quit)
-   ("w" . git-wip-timemachine-kill-abbreviated-revision)
-   ("W" . git-wip-timemachine-kill-revision))
- :group 'git-wip-timemachine)
+  "Git WIP Timemachine, feel the wings of history."
+  :init-value nil
+  :lighter " WIP Timemachine"
+  :keymap
+  '(("p" . git-wip-timemachine-show-previous-revision)
+    ("n" . git-wip-timemachine-show-next-revision)
+    ("q" . git-wip-timemachine-quit)
+    ("w" . git-wip-timemachine-kill-abbreviated-revision)
+    ("W" . git-wip-timemachine-kill-revision))
+  :group 'git-wip-timemachine
+  :after-hook (when (fboundp 'lispy-mode) (lispy-mode -1)))
 
 (defun git-wip-timemachine-validate (file)
   "Validate that there is a FILE and that it belongs to a git repository.

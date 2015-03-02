@@ -60,6 +60,13 @@ Use the following keys to navigate WIP versions of the file:
 If you want, you can of course bind `git-wip-timemachine` to a key
 sequence of your choice.
 
+### Interactions with other modes
+
+[`lispy-mode`](https://github.com/abo-abo/lispy) interferes with the
+default bindings of `git-wip-timemachine`. If it is on when you start
+the timemachine, it will be turned off automatically (and become
+active again when you exit the timemachine).
+
 ### Bonus: Magit integration
 
 If you use [`magit`](https://github.com/magit/magit), you might be
