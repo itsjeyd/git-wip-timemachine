@@ -102,18 +102,22 @@ will be shown in the minibuffer while navigating commits."
  (git-wip-timemachine-show-revision (car (git-wip-timemachine--revisions))))
 
 (defun git-wip-timemachine-show-previous-revision ()
- "Show previous revision of file."
- (interactive)
- (git-wip-timemachine-show-revision
-  (cadr (member git-wip-timemachine-revision
-                (git-wip-timemachine--revisions)))))
+  "Show previous revision of file."
+  (interactive)
+  (let ((revision (cadr (member git-wip-timemachine-revision
+                                (git-wip-timemachine--revisions)))))
+    (if revision
+        (git-wip-timemachine-show-revision revision)
+      (message "No previous WIP commit. You're looking at the oldest one."))))
 
 (defun git-wip-timemachine-show-next-revision ()
- "Show next revision of file."
- (interactive)
- (git-wip-timemachine-show-revision
-  (cadr (member git-wip-timemachine-revision
-                (reverse (git-wip-timemachine--revisions))))))
+  "Show next revision of file."
+  (interactive)
+  (let ((revision (cadr (member git-wip-timemachine-revision
+                                (reverse (git-wip-timemachine--revisions))))))
+    (if revision
+        (git-wip-timemachine-show-revision revision)
+      (message "No next WIP commit. You're looking at the most recent one."))))
 
 (defun git-wip-timemachine-show-revision (revision)
  "Show a REVISION (commit hash) of the current file."
