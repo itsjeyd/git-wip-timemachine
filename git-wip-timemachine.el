@@ -2,8 +2,9 @@
 
 ;; Copyright (C) 2014-2015 Tim Krones
 
-;; Author: Tim Krones
-;; Verson: 1.0
+;; Author: Tim Krones <t.krones@gmx.net>
+;; Version: 1.0
+;; Package-Requires: ((s "1.9.0"))
 ;; URL: https://github.com/itsjeyd/git-wip-timemachine
 ;; Keywords: git
 
@@ -26,8 +27,16 @@
 
 ;;; Commentary:
 
-;; Use git-wip-timemachine to browse git-wip versions of a file with
-;; p (previous) and n (next).
+;; Issue M-x git-wip-timemachine to start browsing through WIP
+;; versions of a file.
+
+;; Control the time machine using the following keys:
+
+;; p -- Visit previous WIP version.
+;; n -- Visit next WIP version.
+;; w -- Copy the abbreviated hash of the current WIP version.
+;; W -- Copy the full hash of the current WIP version.
+;; q -- Exit the time machine.
 
 ;;; Credits:
 
