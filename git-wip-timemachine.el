@@ -152,20 +152,16 @@ will be shown in the minibuffer while navigating commits."
 (defun git-wip-timemachine-kill-revision ()
  "Kill the current revision's commit hash."
  (interactive)
- (let ((this-revision (nth 1 git-wip-timemachine-revision)))
-  (with-temp-buffer
-   (insert this-revision)
-   (message (buffer-string))
-   (kill-region (point-min) (point-max)))))
+ (let ((revision (nth 1 git-wip-timemachine-revision)))
+   (message revision)
+   (kill-new revision)))
 
 (defun git-wip-timemachine-kill-abbreviated-revision ()
   "Kill the current revision's abbreviated commit hash."
   (interactive)
-  (let ((this-revision (git-wip-timemachine-abbreviate (nth 1 git-wip-timemachine-revision))))
-    (with-temp-buffer
-      (insert this-revision)
-      (message (buffer-string))
-      (kill-region (point-min) (point-max)))))
+  (let ((revision (git-wip-timemachine-abbreviate (nth 1 git-wip-timemachine-revision))))
+    (message revision)
+    (kill-new revision)))
 
 (define-minor-mode git-wip-timemachine-mode
  "Git WIP Timemachine, feel the wings of history."
