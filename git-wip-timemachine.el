@@ -39,6 +39,16 @@
 
 (require 'cl-lib)
 (require 's)
+(require 'vc-git)
+
+(defcustom git-wip-timemachine-abbreviation-length 12
+ "Number of chars from the full SHA1 hash to use for abbreviation."
+ :group 'git-wip-timemachine)
+
+(defcustom git-wip-timemachine-show-minibuffer-details t
+ "Non-nil means that details of the commit (its hash and date)
+will be shown in the minibuffer while navigating commits."
+ :group 'git-wip-timemachine)
 
 (defvar git-wip-timemachine-branch nil)
 (defvar git-wip-timemachine-directory nil)
@@ -117,6 +127,10 @@
    (setq git-wip-timemachine-revision revision)
    (goto-char current-position))))
 
+(defun git-wip-timemachine-abbreviate (revision)
+  "Return REVISION abbreviated to `git-wip-timemachine-abbreviation-length' chars."
+  (substring revision 0 git-wip-timemachine-abbreviation-length))
+
 (defun git-wip-timemachine-quit ()
  "Exit the timemachine."
  (interactive)
@@ -131,6 +145,15 @@
    (message (buffer-string))
    (kill-region (point-min) (point-max)))))
 
+(defun git-wip-timemachine-kill-abbreviated-revision ()
+  "Kill the current revision's abbreviated commit hash."
+  (interactive)
+  (let ((this-revision (git-wip-timemachine-abbreviate git-wip-timemachine-revision)))
+    (with-temp-buffer
+      (insert this-revision)
+      (message (buffer-string))
+      (kill-region (point-min) (point-max)))))
+
 (define-minor-mode git-wip-timemachine-mode
  "Git WIP Timemachine, feel the wings of history."
  :init-value nil
@@ -139,8 +162,17 @@
  '(("p" . git-wip-timemachine-show-previous-revision)
    ("n" . git-wip-timemachine-show-next-revision)
    ("q" . git-wip-timemachine-quit)
-   ("w" . git-wip-timemachine-kill-revision))
+   ("w" . git-wip-timemachine-kill-abbreviated-revision)
+   ("W" . git-wip-timemachine-kill-revision))
  :group 'git-wip-timemachine)
+
+(defun git-wip-timemachine-validate (file)
+  "Validate that there is a FILE and that it belongs to a git repository.
+Call with the value of `buffer-file-name'."
+  (unless file
+    (error "This buffer is not visiting a file."))
+  (unless (vc-git-registered file)
+    (error "This file is untracked.")))
 
 ;;;###autoload
 (defun git-wip-timemachine ()
