@@ -71,6 +71,16 @@ will be shown in the minibuffer while navigating commits."
 ;; git symbolic-ref --short -q HEAD
 ;; Source: http://git-blame.blogspot.de/2013/06/checking-current-branch-programatically.html
 
+(defun git-wip-timemachine--branch ()
+  "Determine current branch."
+  (s-trim-right (shell-command-to-string "git symbolic-ref --short -q HEAD")))
+
+(defun git-wip-timemachine--merge-base (current-branch)
+  "Determine merge base of current branch and corresponding WIP branch."
+  (s-trim-right (shell-command-to-string
+                 (format "git merge-base wip/%s %s"
+                         current-branch current-branch))))
+
 (defun git-wip-timemachine--revisions ()
   "List git-wip revisions of current buffer's file."
   (let ((default-directory git-wip-timemachine-directory)
@@ -195,13 +205,8 @@ Call with the value of `buffer-file-name'."
   (git-wip-timemachine-validate (buffer-file-name))
   (let* ((file-name (buffer-file-name))
          (git-directory (expand-file-name (vc-git-root file-name)))
-         (current-branch (s-trim-right
-                          (shell-command-to-string
-                           "git symbolic-ref --short -q HEAD")))
-         (merge-base (s-trim-right
-                      (shell-command-to-string
-                       (format "git merge-base wip/%s %s"
-                               current-branch current-branch))))
+         (current-branch (git-wip-timemachine--branch))
+         (merge-base (git-wip-timemachine--merge-base current-branch))
          (timemachine-buffer (format "WIP timemachine:%s" (buffer-name)))
          (current-position (point))
          (current-mode major-mode))
