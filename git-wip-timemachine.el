@@ -92,11 +92,11 @@ will be shown in the minibuffer while navigating commits."
 
 (defun git-wip-timemachine--revisions ()
   "List git-wip revisions of current buffer's file."
-  (let ((default-directory git-wip-timemachine-directory)
-        (file git-wip-timemachine-file)
-        (branch git-wip-timemachine-branch)
-        (wip-branch (format "wip/%s" git-wip-timemachine-branch))
-        (exclude-from (format "^%s~1" git-wip-timemachine-merge-base)))
+  (let* ((default-directory git-wip-timemachine-directory)
+         (file git-wip-timemachine-file)
+         (branch git-wip-timemachine-branch)
+         (wip-branch (format "wip/%s" branch))
+         (exclude-from (format "^%s~1" git-wip-timemachine-merge-base)))
     (with-temp-buffer
       (unless (zerop (process-file vc-git-program nil t nil
                                    "--no-pager" "log"
