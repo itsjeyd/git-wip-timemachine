@@ -76,10 +76,6 @@ will be shown in the minibuffer while navigating commits."
 ;; Command (including hash of last commit of wip "parent branch"):
 ;; git log wip/<branch> <branch> ^$(git merge-base wip/<branch> <branch>)~1 --pretty=format:%h <file>
 
-;; Programmatically determine current branch:
-;; git symbolic-ref --short -q HEAD
-;; Source: http://git-blame.blogspot.de/2013/06/checking-current-branch-programatically.html
-
 (defun git-wip-timemachine--branch ()
   "Determine current branch."
   (s-trim-right (shell-command-to-string "git symbolic-ref --short -q HEAD")))
