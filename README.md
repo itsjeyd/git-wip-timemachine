@@ -33,7 +33,7 @@ start using it, follow these steps:
 
 2. Clone this repo:
 
-        git clone https://github.com/itsjeyd/git-wip-timemachine.git
+        $ git clone https://github.com/itsjeyd/git-wip-timemachine.git
 
 3. Add the following to your init-file:
 
