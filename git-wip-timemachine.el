@@ -82,6 +82,14 @@ will be shown in the minibuffer while navigating commits."
   "Determine current branch."
   (s-trim-right (shell-command-to-string "git symbolic-ref --short -q HEAD")))
 
+(defun git-wip-timemachine--buffer ()
+  "Return name for time machine buffer."
+  (format "WIP timemachine:%s" (buffer-name)))
+
+(defun git-wip-timemachine--directory (file-name)
+  "Return root directory of current git repository."
+  (expand-file-name (vc-git-root file-name)))
+
 (defun git-wip-timemachine--merge-base (current-branch)
   "Determine merge base of current branch and corresponding WIP branch."
   (s-trim-right (shell-command-to-string
@@ -211,10 +219,10 @@ Call with the value of `buffer-file-name'."
   (interactive)
   (git-wip-timemachine-validate (buffer-file-name))
   (let* ((file-name (buffer-file-name))
-         (git-directory (expand-file-name (vc-git-root file-name)))
+         (git-directory (git-wip-timemachine--directory file-name))
          (current-branch (git-wip-timemachine--branch))
          (merge-base (git-wip-timemachine--merge-base current-branch))
-         (timemachine-buffer (format "WIP timemachine:%s" (buffer-name)))
+         (timemachine-buffer (git-wip-timemachine--buffer))
          (current-position (point))
          (current-mode major-mode))
     (with-current-buffer (get-buffer-create timemachine-buffer)
