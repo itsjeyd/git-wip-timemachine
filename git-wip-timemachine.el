@@ -32,6 +32,7 @@
 
 ;; Control the time machine using the following keys:
 
+;; . -- Visit current WIP version.
 ;; p -- Visit previous WIP version.
 ;; n -- Visit next WIP version.
 ;; w -- Copy the abbreviated hash of the current WIP version.
@@ -205,7 +206,8 @@ Call with the value of `buffer-file-name'."
   :init-value nil
   :lighter " WIP Timemachine"
   :keymap
-  '(("p" . git-wip-timemachine-show-previous-revision)
+  '(("." . git-wip-timemachine-show-current-revision)
+    ("p" . git-wip-timemachine-show-previous-revision)
     ("n" . git-wip-timemachine-show-next-revision)
     ("q" . git-wip-timemachine-quit)
     ("w" . git-wip-timemachine-kill-abbreviated-revision)
