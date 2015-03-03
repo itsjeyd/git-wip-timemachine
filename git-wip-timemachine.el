@@ -235,9 +235,9 @@ Call with the value of `buffer-file-name'."
             git-wip-timemachine-branch current-branch
             git-wip-timemachine-merge-base merge-base
             git-wip-timemachine-revisions (git-wip-timemachine--revisions))
-      (git-wip-timemachine-show-current-revision)
-      (switch-to-buffer timemachine-buffer)
-      (goto-char current-position))))
+      (git-wip-timemachine-show-current-revision))
+    (switch-to-buffer timemachine-buffer)
+    (goto-char current-position)))
 
 (provide 'git-wip-timemachine)
 
