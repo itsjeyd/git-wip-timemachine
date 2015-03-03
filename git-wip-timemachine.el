@@ -78,6 +78,10 @@ will be shown in the minibuffer while navigating commits."
 ;; Command (including hash of last commit of wip "parent branch"):
 ;; git log wip/<branch> <branch> ^$(git merge-base wip/<branch> <branch>)~1 --pretty=format:%h <file>
 
+(defun git-wip-timemachine--abbreviate (revision)
+  "Return REVISION abbreviated to `git-wip-timemachine-abbreviation-length' chars."
+  (substring revision 0 git-wip-timemachine-abbreviation-length))
+
 (defun git-wip-timemachine--branch ()
   "Determine current branch."
   (s-trim-right (shell-command-to-string "git symbolic-ref --short -q HEAD")))
@@ -121,30 +125,7 @@ will be shown in the minibuffer while navigating commits."
           (forward-line 1))
         (nreverse revisions)))))
 
-(defun git-wip-timemachine-show-current-revision ()
-  "Show last (current) revision of file."
-  (interactive)
-  (git-wip-timemachine-show-revision (car git-wip-timemachine-revisions)))
-
-(defun git-wip-timemachine-show-previous-revision ()
-  "Show previous revision of file."
-  (interactive)
-  (let ((revision (cadr (member git-wip-timemachine-revision
-                                git-wip-timemachine-revisions))))
-    (if revision
-        (git-wip-timemachine-show-revision revision)
-      (message "No previous WIP commit. You're looking at the oldest one."))))
-
-(defun git-wip-timemachine-show-next-revision ()
-  "Show next revision of file."
-  (interactive)
-  (let ((revision (cadr (member git-wip-timemachine-revision
-                                (reverse git-wip-timemachine-revisions)))))
-    (if revision
-        (git-wip-timemachine-show-revision revision)
-      (message "No next WIP commit. You're looking at the most recent one."))))
-
-(defun git-wip-timemachine-show-revision (revision)
+(defun git-wip-timemachine--show-revision (revision)
   "Show a REVISION (commit hash) of the current file."
   (when revision
     (let ((current-position (point))
@@ -162,16 +143,43 @@ will be shown in the minibuffer while navigating commits."
       (let* ((total-revisions (length git-wip-timemachine-revisions))
              (n-of-m (format "(%d/%d)" revision-number total-revisions)))
         (setq mode-line-format
-              (list "Commit: " (git-wip-timemachine-abbreviate commit-hash) " -- %b -- " n-of-m " -- [%p]")))
+              (list "Commit: " (git-wip-timemachine--abbreviate commit-hash) " -- %b -- " n-of-m " -- [%p]")))
       (setq git-wip-timemachine-revision revision)
       (goto-char current-position)
       (when git-wip-timemachine-show-minibuffer-details
         (message "Commit: %s -- Date: %s [%s]"
                  commit-hash date-full date-relative)))))
 
-(defun git-wip-timemachine-abbreviate (revision)
-  "Return REVISION abbreviated to `git-wip-timemachine-abbreviation-length' chars."
-  (substring revision 0 git-wip-timemachine-abbreviation-length))
+(defun git-wip-timemachine--validate (file)
+  "Validate that there is a FILE and that it belongs to a git repository.
+Call with the value of `buffer-file-name'."
+  (unless file
+    (error "This buffer is not visiting a file."))
+  (unless (vc-git-registered file)
+    (error "This file is untracked.")))
+
+(defun git-wip-timemachine-show-current-revision ()
+  "Show last (current) revision of file."
+  (interactive)
+  (git-wip-timemachine--show-revision (car git-wip-timemachine-revisions)))
+
+(defun git-wip-timemachine-show-previous-revision ()
+  "Show previous revision of file."
+  (interactive)
+  (let ((revision (cadr (member git-wip-timemachine-revision
+                                git-wip-timemachine-revisions))))
+    (if revision
+        (git-wip-timemachine--show-revision revision)
+      (message "No previous WIP commit. You're looking at the oldest one."))))
+
+(defun git-wip-timemachine-show-next-revision ()
+  "Show next revision of file."
+  (interactive)
+  (let ((revision (cadr (member git-wip-timemachine-revision
+                                (reverse git-wip-timemachine-revisions)))))
+    (if revision
+        (git-wip-timemachine--show-revision revision)
+      (message "No next WIP commit. You're looking at the most recent one."))))
 
 (defun git-wip-timemachine-quit ()
   "Exit the timemachine."
@@ -188,7 +196,7 @@ will be shown in the minibuffer while navigating commits."
 (defun git-wip-timemachine-kill-abbreviated-revision ()
   "Kill the current revision's abbreviated commit hash."
   (interactive)
-  (let ((revision (git-wip-timemachine-abbreviate (nth 1 git-wip-timemachine-revision))))
+  (let ((revision (git-wip-timemachine--abbreviate (nth 1 git-wip-timemachine-revision))))
     (message revision)
     (kill-new revision)))
 
@@ -205,19 +213,11 @@ will be shown in the minibuffer while navigating commits."
   :group 'git-wip-timemachine
   :after-hook (when (fboundp 'lispy-mode) (lispy-mode -1)))
 
-(defun git-wip-timemachine-validate (file)
-  "Validate that there is a FILE and that it belongs to a git repository.
-Call with the value of `buffer-file-name'."
-  (unless file
-    (error "This buffer is not visiting a file."))
-  (unless (vc-git-registered file)
-    (error "This file is untracked.")))
-
 ;;;###autoload
 (defun git-wip-timemachine ()
   "Enable git-wip timemachine for file of current buffer."
   (interactive)
-  (git-wip-timemachine-validate (buffer-file-name))
+  (git-wip-timemachine--validate (buffer-file-name))
   (let* ((file-name (buffer-file-name))
          (git-directory (git-wip-timemachine--directory file-name))
          (current-branch (git-wip-timemachine--branch))
