@@ -42,15 +42,14 @@ start using it, follow these steps:
 
 ### Usage
 
-If you've used `git-timemachine` before you can stop reading now --
-`git-wip-timemachine` provides the same set of commands and default
-key bindings.
-
 Issue <kbd>M-x</kbd> `git-wip-timemachine` to browse through WIP
 versions of a file.
 
 Use the following keys to navigate WIP versions of the file:
 
+- <kbd>.</kbd> Visit current (latest) WIP version.
+- <kbd>></kbd> Visit current (latest) WIP version.
+- <kbd><</kbd> Visit oldest WIP version (equivalent to merge base of current branch and associated WIP branch).
 - <kbd>p</kbd> Visit previous WIP version.
 - <kbd>n</kbd> Visit next WIP version.
 - <kbd>w</kbd> Copy the abbreviated hash of the current WIP version.
