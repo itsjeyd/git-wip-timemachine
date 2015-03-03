@@ -236,7 +236,7 @@ Call with the value of `buffer-file-name'."
     (kill-new revision)))
 
 (define-minor-mode git-wip-timemachine-mode
-  "Git WIP Timemachine, feel the wings of history."
+  "Git WIP Timemachine, feel the wings of (recent) history."
   :init-value nil
   :lighter " WIP Timemachine"
   :keymap
