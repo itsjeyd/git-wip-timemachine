@@ -33,6 +33,8 @@
 ;; Control the time machine using the following keys:
 
 ;; . -- Visit current WIP version.
+;; > -- Visit current WIP version.
+;; < -- Visit oldest WIP version (equivalent to merge base of current branch and associated WIP branch).
 ;; p -- Visit previous WIP version.
 ;; n -- Visit next WIP version.
 ;; w -- Copy the abbreviated hash of the current WIP version.
@@ -164,6 +166,10 @@ Call with the value of `buffer-file-name'."
   (interactive)
   (git-wip-timemachine--show-revision (car git-wip-timemachine-revisions)))
 
+(defun git-wip-timemachine-show-oldest-revision ()
+  (interactive)
+  (git-wip-timemachine--show-revision (car (reverse git-wip-timemachine-revisions))))
+
 (defun git-wip-timemachine-show-previous-revision ()
   "Show previous revision of file."
   (interactive)
@@ -207,6 +213,8 @@ Call with the value of `buffer-file-name'."
   :lighter " WIP Timemachine"
   :keymap
   '(("." . git-wip-timemachine-show-current-revision)
+    (">" . git-wip-timemachine-show-current-revision)
+    ("<" . git-wip-timemachine-show-oldest-revision)
     ("p" . git-wip-timemachine-show-previous-revision)
     ("n" . git-wip-timemachine-show-next-revision)
     ("q" . git-wip-timemachine-quit)
