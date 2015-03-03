@@ -63,12 +63,14 @@ will be shown in the minibuffer while navigating commits."
 (defvar git-wip-timemachine-file nil)
 (defvar git-wip-timemachine-merge-base nil)
 (defvar git-wip-timemachine-revision nil)
+(defvar git-wip-timemachine-revisions nil)
 
 (make-variable-buffer-local 'git-wip-timemachine-branch)
 (make-variable-buffer-local 'git-wip-timemachine-directory)
 (make-variable-buffer-local 'git-wip-timemachine-file)
 (make-variable-buffer-local 'git-wip-timemachine-merge-base)
 (make-variable-buffer-local 'git-wip-timemachine-revision)
+(make-variable-buffer-local 'git-wip-timemachine-revisions)
 
 ;; Command (excluding hash of last commit of wip "parent branch"):
 ;; git log wip/<branch>...$(git merge-base wip/<branch> <branch>) --pretty=format:%h <file>
@@ -114,13 +116,13 @@ will be shown in the minibuffer while navigating commits."
 (defun git-wip-timemachine-show-current-revision ()
   "Show last (current) revision of file."
   (interactive)
-  (git-wip-timemachine-show-revision (car (git-wip-timemachine--revisions))))
+  (git-wip-timemachine-show-revision (car git-wip-timemachine-revisions)))
 
 (defun git-wip-timemachine-show-previous-revision ()
   "Show previous revision of file."
   (interactive)
   (let ((revision (cadr (member git-wip-timemachine-revision
-                                (git-wip-timemachine--revisions)))))
+                                git-wip-timemachine-revisions))))
     (if revision
         (git-wip-timemachine-show-revision revision)
       (message "No previous WIP commit. You're looking at the oldest one."))))
@@ -129,7 +131,7 @@ will be shown in the minibuffer while navigating commits."
   "Show next revision of file."
   (interactive)
   (let ((revision (cadr (member git-wip-timemachine-revision
-                                (reverse (git-wip-timemachine--revisions))))))
+                                (reverse git-wip-timemachine-revisions)))))
     (if revision
         (git-wip-timemachine-show-revision revision)
       (message "No next WIP commit. You're looking at the most recent one."))))
@@ -149,7 +151,7 @@ will be shown in the minibuffer while navigating commits."
                       "--no-pager" "show" (format "%s:%s" commit-hash git-wip-timemachine-file)))
       (setq buffer-read-only t)
       (set-buffer-modified-p nil)
-      (let* ((total-revisions (length (git-wip-timemachine--revisions)))
+      (let* ((total-revisions (length git-wip-timemachine-revisions))
              (n-of-m (format "(%d/%d)" revision-number total-revisions)))
         (setq mode-line-format
               (list "Commit: " (git-wip-timemachine-abbreviate commit-hash) " -- %b -- " n-of-m " -- [%p]")))
@@ -223,7 +225,8 @@ Call with the value of `buffer-file-name'."
             git-wip-timemachine-file (file-relative-name file-name git-directory)
             git-wip-timemachine-revision nil
             git-wip-timemachine-branch current-branch
-            git-wip-timemachine-merge-base merge-base)
+            git-wip-timemachine-merge-base merge-base
+            git-wip-timemachine-revisions (git-wip-timemachine--revisions))
       (git-wip-timemachine-show-current-revision)
       (switch-to-buffer timemachine-buffer)
       (goto-char current-position))))
