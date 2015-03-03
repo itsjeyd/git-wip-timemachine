@@ -11,25 +11,28 @@ Emacs.
 `git-wip-timemachine` is not on [MELPA](http://melpa.org/) (yet). To
 start using it, follow these steps:
 
-1. Set up [`git-wip`](https://github.com/itsjeyd/git-wip):
+1. If you haven't already, set up
+   [`git-wip`](https://github.com/itsjeyd/git-wip):
 
-   - Clone `git-wip` to your `$HOME` directory:
+   - Clone the `git-wip` package to your `$HOME` directory:
 
-            $ cd
-            $ git clone https://github.com/itsjeyd/git-wip
+             $ cd
+             $ git clone https://github.com/itsjeyd/git-wip
 
-     You can also clone `git-wip` to a different directory. Note that
-     if this directory is not part of your `exec-path` in Emacs,
-     you'll need to update the first line in
-     `/path/to/git-wip/emacs/git-wip.el` accordingly.
+     If you decide to clone to a different directory and that
+     directory is *not* part of your `exec-path` in Emacs, you'll need
+     to add the following code to your init-file (to make sure Emacs
+     can find the `git-wip` script):
+
+     (add-to-list 'exec-path "/path/to/git-wip")
 
    - Add the following code to your init-file:
 
-            (load "/path/to/git-wip/emacs/git-wip.el")
+             (load "/path/to/git-wip/emacs/git-wip.el")
 
-     Next time you save a file that is part of a `git` repository,
-     Emacs will automatically create a WIP commit by calling out to
-     `git-wip` for you.
+     From now on, every time you save a file that is part of a `git`
+     repository, Emacs will automatically create a WIP commit by
+     calling out to `git-wip` for you.
 
 2. Clone this repo:
 
