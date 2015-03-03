@@ -24,11 +24,11 @@ start using it, follow these steps:
      to add the following code to your init-file (to make sure Emacs
      can find the `git-wip` script):
 
-             (add-to-list 'exec-path "/path/to/git-wip")
+            (add-to-list 'exec-path "/path/to/git-wip")
 
    - Add the following code to your init-file:
 
-             (load "/path/to/git-wip/emacs/git-wip.el")
+            (load "/path/to/git-wip/emacs/git-wip.el")
 
      From now on, every time you save a file that is part of a `git`
      repository, Emacs will automatically create a WIP commit by
