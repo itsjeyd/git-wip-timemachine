@@ -29,12 +29,12 @@
 
 ;; Issue M-x git-wip-timemachine to start browsing through WIP
 ;; versions of a file.
-
+;;
 ;; Control the time machine using the following keys:
-
+;;
 ;; . -- Visit current WIP version.
 ;; > -- Visit current WIP version.
-;; < -- Visit oldest WIP version (equivalent to merge base of current branch and associated WIP branch).
+;; < -- Visit oldest WIP version (equivalent to merge base of current branch and associated WIP branch *if* merge base introduces changes to current file).
 ;; p -- Visit previous WIP version.
 ;; n -- Visit next WIP version.
 ;; w -- Copy the abbreviated hash of the current WIP version.
