@@ -1,4 +1,4 @@
-## git-wip-timemachine <a href="http://opensource.org/licenses/GPL-3.0"><img src="https://img.shields.io/badge/license-GPL-blue.svg" /></a>
+## git-wip-timemachine [![License: GPL](https://img.shields.io/badge/license-GPL-blue.svg")](http://opensource.org/licenses/GPL-3.0)
 
 `git-wip-timemachine` is a modified version of
 [`git-timemachine`](https://github.com/pidu/git-timemachine) by Peter
