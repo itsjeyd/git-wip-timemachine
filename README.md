@@ -8,7 +8,7 @@ Emacs.
 
 ### Installation
 
-`git-wip-timemachine` is not on [MELPA](http://melpa.org/) (yet). To
+`git-wip-timemachine` is on [MELPA](http://melpa.org/). To
 start using it, follow these steps:
 
 1. If you haven't already, set up
@@ -34,14 +34,9 @@ start using it, follow these steps:
      repository, Emacs will automatically create a WIP commit by
      calling out to `git-wip` for you.
 
-2. Clone this repo:
+2. Install `git-wip-timemachine` via:
 
-        $ git clone https://github.com/itsjeyd/git-wip-timemachine.git
-
-3. Add the following to your init-file:
-
-        (add-to-list 'load-path "~/path/to/git-wip-timemachine/")
-        (require 'git-wip-timemachine)
+   <kbd>M-x</kbd> `package-install` <kbd>RET</kbd> `git-wip-timemachine` <kbd>RET</kbd>
 
 ### Usage
 
