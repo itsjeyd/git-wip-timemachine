@@ -57,6 +57,10 @@ Use the following keys to navigate WIP versions of the file:
 If you want, you can of course bind `git-wip-timemachine` to a key
 sequence of your choice.
 
+Finally, there's also `git-wip-timemachine-toggle` which does exactly
+what its name suggests: If the timemachine is on, calling this command
+will turn it off (and vice versa).
+
 ### Interactions with other modes
 
 [`lispy-mode`](https://github.com/abo-abo/lispy) interferes with the

@@ -42,6 +42,10 @@
 ;; w -- Copy the abbreviated hash of the current WIP version.
 ;; W -- Copy the full hash of the current WIP version.
 ;; q -- Exit the time machine.
+;;
+;; Finally, there's also `git-wip-timemachine-toggle` which does exactly
+;; what its name suggests: If the timemachine is on, calling this command
+;; will turn it off (and vice versa).
 
 ;;; Installation
 
@@ -284,6 +288,14 @@ Call with the value of `buffer-file-name'."
       (git-wip-timemachine-show-current-revision))
     (switch-to-buffer timemachine-buffer)
     (goto-char current-position)))
+
+;;;###autoload
+(defun git-wip-timemachine-toggle ()
+  "Toggle `git-wip-timemachine' mode."
+  (interactive)
+  (if (bound-and-true-p git-wip-timemachine-mode)
+      (git-wip-timemachine-quit)
+    (git-wip-timemachine)))
 
 (provide 'git-wip-timemachine)
 
