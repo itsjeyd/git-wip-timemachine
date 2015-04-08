@@ -1,4 +1,4 @@
-## git-wip-timemachine [![License: GPL](https://img.shields.io/badge/license-GPL-blue.svg)](http://opensource.org/licenses/GPL-3.0) [![MELPA](http://melpa.org/packages/git-wip-timemachine-badge.svg)](http://melpa.org/#/git-wip-timemachine)
+## git-wip-timemachine [![License: GPL](https://img.shields.io/badge/license-GPL-blue.svg)](http://opensource.org/licenses/GPL-3.0) [![MELPA](http://melpa.org/packages/git-wip-timemachine-badge.svg)](http://melpa.org/#/git-wip-timemachine) [![MELPA Stable](http://stable.melpa.org/packages/git-wip-timemachine-badge.svg)](http://stable.melpa.org/#/git-wip-timemachine)
 
 `git-wip-timemachine` is a modified version of
 [`git-timemachine`](https://github.com/pidu/git-timemachine) by Peter
