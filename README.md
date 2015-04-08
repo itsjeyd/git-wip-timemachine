@@ -50,6 +50,7 @@ Use the following keys to navigate WIP versions of the file:
 - <kbd><</kbd> Visit oldest WIP version (equivalent to merge base of current branch and associated WIP branch *if* merge base introduces changes to current file).
 - <kbd>p</kbd> Visit previous WIP version.
 - <kbd>n</kbd> Visit next WIP version.
+- <kbd>g</kbd> Visit nth WIP version.
 - <kbd>w</kbd> Copy the abbreviated hash of the current WIP version.
 - <kbd>W</kbd> Copy the full hash of the current WIP version.
 - <kbd>q</kbd> Exit the time machine.

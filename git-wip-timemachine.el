@@ -227,6 +227,15 @@ Call with the value of command `buffer-file-name'."
         (git-wip-timemachine--show-revision revision)
       (message "No next WIP commit. You're looking at the most recent one."))))
 
+(defun git-wip-timemachine-show-nth-revision (n)
+  "Show nth WIP revision."
+  (interactive "nEnter revision number: ")
+  (let ((revision (nth (- n 1) (reverse git-wip-timemachine-revisions)))
+        (total-revisions (length git-wip-timemachine-revisions)))
+    (if revision
+        (git-wip-timemachine--show-revision revision)
+      (message "Only %d WIP revisions exist." total-revisions))))
+
 (defun git-wip-timemachine-quit ()
   "Exit the timemachine."
   (interactive)
@@ -257,6 +266,7 @@ Call with the value of command `buffer-file-name'."
     ("<" . git-wip-timemachine-show-oldest-revision)
     ("p" . git-wip-timemachine-show-previous-revision)
     ("n" . git-wip-timemachine-show-next-revision)
+    ("g" . git-wip-timemachine-show-nth-revision)
     ("q" . git-wip-timemachine-quit)
     ("w" . git-wip-timemachine-kill-abbreviated-revision)
     ("W" . git-wip-timemachine-kill-revision))
