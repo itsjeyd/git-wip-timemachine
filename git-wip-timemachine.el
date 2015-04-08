@@ -39,6 +39,7 @@
 ;;      *if* merge base introduces changes to current file).
 ;; p -- Visit previous WIP version.
 ;; n -- Visit next WIP version.
+;; g -- Visit nth WIP version.
 ;; w -- Copy the abbreviated hash of the current WIP version.
 ;; W -- Copy the full hash of the current WIP version.
 ;; q -- Exit the time machine.
