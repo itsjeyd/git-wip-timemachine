@@ -204,6 +204,7 @@ Call with the value of `buffer-file-name'."
   (git-wip-timemachine--show-revision (car git-wip-timemachine-revisions)))
 
 (defun git-wip-timemachine-show-oldest-revision ()
+  "Show oldest WIP revision of file."
   (interactive)
   (git-wip-timemachine--show-revision
    (car (reverse git-wip-timemachine-revisions))))
