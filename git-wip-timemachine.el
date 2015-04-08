@@ -192,7 +192,7 @@ will be shown in the minibuffer while navigating commits."
 
 (defun git-wip-timemachine--validate (file)
   "Validate that there is a FILE and that it belongs to a git repository.
-Call with the value of `buffer-file-name'."
+Call with the value of command `buffer-file-name'."
   (unless file
     (error "This buffer is not visiting a file."))
   (unless (vc-git-registered file)
